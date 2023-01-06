@@ -7,53 +7,28 @@ public class LevelManager : Singleton<LevelManager>
 {
     private Scene _lastLoadedScene;
     private int _currentLevel;
+    private int _maxLevel;
 
     public int CurrentLevel { get => _currentLevel; set => _currentLevel = value; }
+    public int MaxLevel { get => _maxLevel; set => _maxLevel = value; }
 
     private void Start()
     {
-
-       // ChangeLevel("Level " + GetLevelName());
+        if (!_isDontDestroyOnLoad)
+            _isDontDestroyOnLoad = true;
+        MaxLevel = SceneManager.sceneCountInBuildSettings - 1;
     }
 
     public int GetLevelName()
     {
         CurrentLevel = SaveManager.Instance.SaveState.LevelCounter;
+        
         return CurrentLevel;
     }
 
-    public void ChangeLevel(string sceneName)
+    public void ChangeLevel(int index)
     {
-        StartCoroutine(ChangeScene(sceneName));
+        SceneManager.LoadScene(index);
     }
-
-    IEnumerator ChangeScene(string sceneName)
-    {
-        /*
-        if (HomaInitialize.Instance.Initialize)
-        {
-            DefaultAnalytics.LevelStarted(sceneName);
-        }
-        */
-        if (_lastLoadedScene.IsValid())
-        {
-            SceneManager.UnloadSceneAsync(_lastLoadedScene);
-            bool sceneUnloaded = false;
-            while (!sceneUnloaded)
-            {
-                sceneUnloaded = !_lastLoadedScene.IsValid();
-                yield return new WaitForEndOfFrame();
-            }
-        }
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-        bool sceneLoaded = false;
-        while (!sceneLoaded)
-        {
-            _lastLoadedScene = SceneManager.GetSceneByName(sceneName);
-            sceneLoaded = _lastLoadedScene != null && _lastLoadedScene.isLoaded;
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
 
 }

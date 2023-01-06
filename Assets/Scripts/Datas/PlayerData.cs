@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Character/Player/Player Data", fileName = "Player Data", order = 1)]
-public class PlayerData : ScriptableObject
+[CreateAssetMenu(menuName = "Character/Player/Player Data", fileName = "Character Data", order = 1)]
+public class PlayerData : CharacterData
 {
-    public float Speed;
+    
 }

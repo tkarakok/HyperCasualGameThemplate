@@ -6,11 +6,11 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
     public static volatile T _instance = null;
 
-    [SerializeField] bool isDontDestroyOnLoad;
+    [SerializeField] protected  bool _isDontDestroyOnLoad;
 
     private void Awake()
     {
-        if (isDontDestroyOnLoad)
+        if (_isDontDestroyOnLoad)
         {
             DontDestroyOnLoad(this);
         }

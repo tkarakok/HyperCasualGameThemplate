@@ -1,13 +1,24 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using  System;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] GameObject _confetti;
-    
+
+    private void Start()
+    {
+#if !UNITY_EDITOR
+        Application.targetFrameRate = 60;
+#endif
+        EventManager.Instance.EndGame += LevelCompleted;
+        EventManager.Instance.GameOver += LevelFailed;
+    }
+
     #region Confetti
     public void Confetti()
     {
@@ -16,13 +27,13 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
     #region End Game Actions
-    public void LevelComplated()
+    public void LevelCompleted()
     {
-        EventManager.Instance.EndGame();
+        StateManager.Instance.ChangeState(State.EndGame);
     }
     public void LevelFailed()
     {
-        EventManager.Instance.GameOver();
+        StateManager.Instance.ChangeState(State.GameOver);
     }
     #endregion
 

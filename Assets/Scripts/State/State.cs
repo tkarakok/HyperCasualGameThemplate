@@ -8,8 +8,6 @@ public enum State
     InGame,
     Pause,
     GameOver,
-    ChangeStage,
-    Finish,
     EndGame
 }
 

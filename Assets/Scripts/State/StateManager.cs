@@ -15,10 +15,11 @@ public class StateManager : Singleton<StateManager>
         State = State.MainMneu;
     }
 
-    public void ChnageState(State state)
+    public void ChangeState(State state)
     {
         State = state;
     }
 
+    public State GetCurrentState(){ return  _state; }
 
 }

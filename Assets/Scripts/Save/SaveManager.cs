@@ -13,8 +13,10 @@ public class SaveManager : Singleton<SaveManager>
 
     private void Start()
     {
+        if (!_isDontDestroyOnLoad)
+            _isDontDestroyOnLoad = true;
         Load();
-        LevelManager.Instance.ChangeLevel("Level " + LevelManager.Instance.GetLevelName());
+        LevelManager.Instance.ChangeLevel(SaveState.LevelCounter);
     }
     public void Save()
     {

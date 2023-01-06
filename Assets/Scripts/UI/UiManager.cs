@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class UiManager : Singleton<UiManager>
     #endregion
     #region Private Fields
     private GameObject _currentPanel;
+    [SerializeField] private TMP_Text _levelText;
     #endregion
 
     private void Awake()
@@ -26,24 +28,27 @@ public class UiManager : Singleton<UiManager>
         }
     }
 
+    private void Start()
+    {
+        EventManager.Instance.InGame += SetLevelText;
+    }
+
     public void StartButton()
     {
         PanelChange(inGamePanel);
-        /*
-        if (HomaInitialize.Instance.Initialize)
-        {
-            DefaultAnalytics.GameplayStarted();
-        }
-        */
         StateManager.Instance.State = State.InGame;
         EventManager.Instance.InGame();
     }
 
+    private void SetLevelText()
+    {
+        if (SaveManager.Instance != null)
+            _levelText.text = "LEVEL " + SaveManager.Instance.SaveState.LevelCounter;
+        else
+            _levelText.gameObject.SetActive(false);
+    }
+    
     #region Panel Change Function
-    /// <summary>
-    /// We can close current panel after then we'll open new panel
-    /// </summary>
-    /// <param name="openPanel"> Panel To Open </param>
     void PanelChange(GameObject openPanel)
     {
         _currentPanel.SetActive(false);
@@ -55,14 +60,13 @@ public class UiManager : Singleton<UiManager>
     #region Level Actionss
     public void RestartLevel()
     {
-        LevelManager.Instance.ChangeLevel("Level " + LevelManager.Instance.GetLevelName());
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        LevelManager.Instance.ChangeLevel(SceneManager.GetActiveScene().buildIndex);
     }
     public void NextLevel()
     {
         SaveManager.Instance.SaveState.LevelCounter++;
         SaveManager.Instance.Save();
-        LevelManager.Instance.ChangeLevel("Level " + LevelManager.Instance.GetLevelName());
+        LevelManager.Instance.ChangeLevel(SaveManager.Instance.SaveState.LevelCounter);
         
     }
     #endregion
